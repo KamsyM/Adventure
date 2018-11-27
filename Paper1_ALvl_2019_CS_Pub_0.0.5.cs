@@ -878,12 +878,101 @@ namespace TextAdventuresCS
                         Say("You decide to give up, try again another time.");
                         stopGame = true;
                         break;
+                    case "save":
+                        if (SaveGame(instruction, characters, items, places))
+                        {
+                            Say("Your game has been saved under " + instruction);
+                        }
+                        else
+                        {
+                            Say("Error, Game couldn't be saved");
+                        }
+                        break;
                     default:
                         Console.WriteLine("Sorry, you don't know how to " + Command + ".");
                         break;
                 }
             }
             Console.ReadLine();
+        }
+
+        private static bool SaveGame(string filename, List<Character> characters, List<Item> items, List<Place> places)
+        {
+            try
+            {
+                using (BinaryWriter Writer = new BinaryWriter(new FileStream(filename + ".gme", FileMode.Create)))
+                {
+                    var characterCount = characters.Count;
+                    for (int i = 0; i < characterCount; i++)
+                    {
+                        Writer.Write(characters[i].ID);
+                        Writer.Write(characters[i].Name);
+                        Writer.Write(characters[i].Description);
+                        Writer.Write(characters[i].CurrentLocation);
+                    }
+
+                    var placeCount = places.Count;
+                    for (int i = 0; i < placeCount; i++)
+                    {
+                        Writer.Write(places[i].id);
+                        Writer.Write(places[i].Description);
+                        Writer.Write(places[i].North);
+                        Writer.Write(places[i].East);
+                        Writer.Write(places[i].South);
+                        Writer.Write(places[i].West);
+                        Writer.Write(places[i].Up);
+                        Writer.Write(places[i].Down);
+                    }
+
+                    var itemCount = items.Count;
+                    for (int i = 0; i < itemCount; i++)
+                    {
+                        Writer.Write(items[i].ID);
+                        Writer.Write(items[i].Description);
+                        Writer.Write(items[i].Status);
+                        Writer.Write(items[i].Location);
+                        Writer.Write(items[i].Name);
+                        Writer.Write(items[i].Commands);
+                        Writer.Write(items[i].Results);
+                    }
+                    //foreach (var item in characters)
+                    //{
+                    //    Writer.Write(item.ID);
+                    //    Writer.Write(item.Name);
+                    //    Writer.Write(item.Description);
+                    //    Writer.Write(item.CurrentLocation);
+                    //}
+
+                    //foreach (var item in places)
+                    //{
+                    //    Writer.Write(item.id);
+                    //    Writer.Write(item.Description);
+                    //    Writer.Write(item.North);
+                    //    Writer.Write(item.East);
+                    //    Writer.Write(item.South);
+                    //    Writer.Write(item.West);
+                    //    Writer.Write(item.Up);
+                    //    Writer.Write(item.Down);
+                    //}
+
+                    //foreach (var item in items)
+                    //{
+                    //    Writer.Write(item.ID);
+                    //    Writer.Write(item.Description);
+                    //    Writer.Write(item.Status);
+                    //    Writer.Write(item.Location);
+                    //    Writer.Write(item.Name);
+                    //    Writer.Write(item.Commands);
+                    //    Writer.Write(item.Results);
+                    //}
+                    Writer.Close();
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private static bool LoadGame(string filename, List<Character> characters, List<Item> items, List<Place> places)
@@ -933,8 +1022,9 @@ namespace TextAdventuresCS
                 }
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -945,16 +1035,21 @@ namespace TextAdventuresCS
             List<Place> places = new List<Place>();
             List<Item> items = new List<Item>();
             List<Character> characters = new List<Character>();
-            Console.Write("Enter filename> ");
-            filename = Console.ReadLine() + ".gme";
-            if (LoadGame(filename, characters, items, places))
+            var repeater = false;
+            while (!repeater)
             {
-                PlayGame(characters, items, places);
-            }
-            else
-            {
-                Console.WriteLine("Unable to load game.");
-                Console.ReadLine();
+                Console.Write("Enter filename> ");
+                filename = Console.ReadLine() + ".gme";
+                if (LoadGame(filename, characters, items, places))
+                {
+                    PlayGame(characters, items, places);
+                    repeater = true;
+                }
+                else
+                {
+                    Console.WriteLine("Unable to load game.");
+                    Console.WriteLine();
+                }
             }
         }
     }

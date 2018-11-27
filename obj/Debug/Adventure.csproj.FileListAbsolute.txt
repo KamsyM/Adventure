@@ -1,0 +1,9 @@
+C:\Users\Kamsi\source\repos\Adventure\bin\Debug\flag1.gme
+C:\Users\Kamsi\source\repos\Adventure\bin\Debug\flag2.gme
+C:\Users\Kamsi\source\repos\Adventure\bin\Debug\Adventure.exe.config
+C:\Users\Kamsi\source\repos\Adventure\bin\Debug\Adventure.exe
+C:\Users\Kamsi\source\repos\Adventure\bin\Debug\Adventure.pdb
+C:\Users\Kamsi\source\repos\Adventure\obj\Debug\Adventure.csprojAssemblyReference.cache
+C:\Users\Kamsi\source\repos\Adventure\obj\Debug\Adventure.csproj.CoreCompileInputs.cache
+C:\Users\Kamsi\source\repos\Adventure\obj\Debug\Adventure.exe
+C:\Users\Kamsi\source\repos\Adventure\obj\Debug\Adventure.pdb
